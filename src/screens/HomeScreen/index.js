@@ -1,9 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Modal, FlatList,ScrollView } from 'react-native';
 import axios from 'axios'
+import MatIcon from "react-native-vector-icons/MaterialCommunityIcons"
+import AntIcon from "react-native-vector-icons/AntDesign"
+import EntypoIcon from "react-native-vector-icons/Entypo"
+
+
 
 // files
 import styles from './style'
+
+
 const HomeScreen = () => {
     const [itemName, setItemName] = useState()
     const [itemArr, setItemArr] = useState([])
@@ -13,7 +20,7 @@ const HomeScreen = () => {
     useEffect(() => {
         axios.get('http://192.168.0.103:3001/TodoList').then(response => {
             // console.log(response.data, "response from api")
-            setItemArr([...response.data])
+            setItemArr([...response.data.reverse()])
         }).catch(err => {
             console.log(err, 'err')
         })
@@ -22,8 +29,6 @@ const HomeScreen = () => {
     const getItem = (text) => {
         console.log(text, "work")
         setItemName(text)
-        console.log(itemArr, "itemarr")
-
     }
 
     const addItem = () => {
@@ -34,7 +39,7 @@ const HomeScreen = () => {
             if (response.data.Posted) {
                 axios.get('http://192.168.0.103:3001/TodoList').then(response => {
                     console.log(response.data, "response from api")
-                    setItemArr([...response.data])
+                    setItemArr([...response.data.reverse()])
                 }).catch(err => {
                     console.log(err, 'err')
                 })
@@ -52,7 +57,7 @@ const HomeScreen = () => {
             if (result.data.deleted) {
                 axios.get('http://192.168.0.103:3001/TodoList').then(response => {
                     console.log(response.data, "response from api")
-                    setItemArr([...response.data])
+                    setItemArr([...response.data.reverse()])
                 }).catch(err => {
                     console.log(err, 'err')
                 })
@@ -67,6 +72,7 @@ const HomeScreen = () => {
     const updateModal = (v) => {
         setShowModal(true)
         setUpdatedId(v._id)
+        setUpdatedItem(v.item)
     }
 
     const UpdateFunc = () => {
@@ -80,7 +86,7 @@ const HomeScreen = () => {
             if (result.data.updated) {
                 axios.get('http://192.168.0.103:3001/TodoList').then(response => {
                     console.log(response.data, "response from api")
-                    setItemArr([...response.data])
+                    setItemArr([...response.data.reverse()])
                 }).catch(err => {
                     console.log(err, 'err')
                 })
@@ -96,15 +102,18 @@ const HomeScreen = () => {
         console.log(v.item, "vvvvvvvvv")
         // let color = Math.floor(Math.random() * 16777215).toString(16);
         return (
-            <View style={styles.flatListStyle} >
+        //  <View style={{flex:1}}>
+                <View style={styles.flatListStyle} >
                 <View style={styles.textStyle}>
+                <EntypoIcon size={50} name="dot-single" color="green"/>
                 <Text style={styles.textTag}>{v.item}</Text>
                 </View>
                 <View style={styles.buttonStyle}>
-                <TouchableOpacity onPress={() => { deleteItem(v) }}><Text>delete</Text></TouchableOpacity>
-                <TouchableOpacity onPress={() => { updateModal(v) }}><Text>update</Text></TouchableOpacity>
+                <TouchableOpacity onPress={() => { updateModal(v) }}><AntIcon size={30} name="edit" color="green"/></TouchableOpacity>
+                <TouchableOpacity onPress={() => { deleteItem(v) }}><MatIcon size={30} name="delete-outline" color="red"/></TouchableOpacity>
                 </View>
             </View>
+        //  </View>
         )
     }
 
@@ -120,15 +129,18 @@ const HomeScreen = () => {
                 <View style={{ backgroundColor: "rgba(0,0,0,0.5)", height: "100%", justifyContent: "center" }}>
                     <View style={{ backgroundColor: "white", minHeight: "40%", margin: "5%", borderRadius: 20, justifyContent: "space-evenly" }}>
 
-                        <TextInput placeholder="update Item"
-                            style={{ borderWidth: 1, borderRadius: 30, paddingLeft: "5%", margin: "5%" }}
+                       <View style={styles.inputViewStyle}>
+                       <TextInput placeholder="update Item"
+                            style={styles.inputStyle}
                             onChangeText={(text) => { setUpdatedItem(text) }}
                             value={updatedItem}
                         />
+                        <AntIcon size={30} name="edit" color="green"/>
+                       </View>
 
                         <View style={{ flexDirection: "row", justifyContent: "space-around" }}>
-                            <TouchableOpacity onPress={() => { setShowModal(false) }}><Text>Cancel</Text></TouchableOpacity>
-                            <TouchableOpacity onPress={() => { UpdateFunc() }}><Text>OK</Text></TouchableOpacity>
+                            <TouchableOpacity onPress={() => { setShowModal(false) }} style={styles.ModalButton}><Text style={{color:"white",fontWeight:"700"}}>Cancel</Text></TouchableOpacity>
+                            <TouchableOpacity onPress={() => { UpdateFunc() }} style={styles.ModalButtonOK}><Text style={{color:"white",fontWeight:"700"}}>OK</Text></TouchableOpacity>
 
                         </View>
                     </View>
@@ -149,19 +161,19 @@ const HomeScreen = () => {
                 <TouchableOpacity
                     onPress={() => { addItem() }}
                     style={styles.AddButton}>
-                    <Text>Add</Text>
+                    {/* <Text>Add</Text> */}
+                    <MatIcon size={30} name="send-check" color="green"/>
                 </TouchableOpacity>
             </View>
-            <View>
-            <FlatList
+           {/* <View> */}
+           <FlatList
                 data={itemArr}
                 renderItem={({ item, index }) => FlatItem(item, index)}
                 keyExtractor={(item, index) => index.toString()}
                 showsVerticalScrollIndicator={true}
-                // style={{borderWidth:2,flex:1}}
-                contentContainerStyle={{flexGrow:1}}
+                style={{height:"85%"}}
             />
-            </View>
+           {/* </View> */}
             {modal()}
         </View>
     )

@@ -12,19 +12,24 @@ export default styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         marginVertical: '5%',
+        borderBottomWidth: 2,
+        borderBottomColor: "green",
+        elevation: 1,
+        borderTopLeftRadius:wp(2),
+        borderTopRightRadius:wp(2),
+        paddingRight:"2%"
+
     },
 
     inputStyle: {
-        borderBottomWidth: 2,
         paddingLeft: "5%",
         flex: 1,
         marginRight: "1%",
-        borderBottomColor: "green",
-        elevation: 2
+        
     },
 
     AddButton: {
-        backgroundColor: "green",
+        // backgroundColor: "green",
         marginLeft: "1%",
     },
 
@@ -33,23 +38,38 @@ export default styles = StyleSheet.create({
     flatListStyle: {
         flexDirection: "row",
         justifyContent: "space-between",
-        marginHorizontal:"5%",
+        marginHorizontal:"3%",
         marginVertical:"5%",
         borderBottomWidth: 2,
         borderBottomColor: "green",
         elevation: 0.5,
-        padding:"4%",
+        padding:"1%",
         // flex:1
     },
     buttonStyle:{
-        flexDirection:"row"
+        flexDirection:"row",
+        flex:1,
+        justifyContent:"space-between"
     },
     textStyle:{
-        flex:1,
+        flex:3,
         alignItems:"center",
+        flexDirection:'row'
     },
     textTag:{
         fontSize:wp(4),
         fontWeight:"700"
+    },
+    ModalButton:{
+        backgroundColor:"green",
+        paddingHorizontal:wp(4),
+        paddingVertical:wp(2),
+        borderRadius:wp(2)
+    },
+    ModalButtonOK:{
+        backgroundColor:"green",
+        paddingHorizontal:wp(8),
+        paddingVertical:wp(2),
+        borderRadius:wp(2)
     }
 });
